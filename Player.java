@@ -98,12 +98,13 @@ public class Player
             {// draw
                 if ( playerid == idNum )
                 {
+                    playercards[playerid]++;
                     draw( serverInput.substring( 2 ) );
                     if ( !( predraw < 28 ) )
                     {
-                        playercards[playerid]++;
+                        
                         System.out
-                            .println( "You draw, with " + playercards[playerid] + " now in hand." );
+                            .println( "You draw, with " + hand.size() + " now in hand." );
                     }
                     else
                     {
@@ -212,18 +213,6 @@ public class Player
     }
 
 
-    public boolean playCard( int index )
-    {
-        if ( isPlayable( index ) )
-        {
-            client.sendAction( "p" + index, idNum );
-            hand.remove( index );// TODO UPDATE gui
-            System.out.println( "Played" );
-            return true;
-        }
-        return false;
-    }
-
 
     public boolean isPlayable( int index )
     {
@@ -322,8 +311,8 @@ public class Player
         System.out.println( "Enter card position:" );
 
         int handpos = in.nextInt() - 1;
-
-        if ( !playCard( handpos ) )
+        String card = hand.get( handpos );
+        if ( !isPlayable( handpos ) )
         {
             System.out.println( "Unplayable: pick another card." );
             turn();
@@ -331,7 +320,7 @@ public class Player
         }
         else
         {
-            if ( hand.get( handpos ).equals( "p4" ) || hand.get( handpos ).equals( "wild" ) )
+            if ( card.equals( "p4" ) || card.substring( 0, 1 ).equals( "w" ) )
             {
                 System.out.println( "Enter Color:" );
                 String color = in.nextLine();
