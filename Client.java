@@ -38,6 +38,7 @@ public class Client
     public void sendAction(String str, int playerID) {
         try
         {
+            System.out.println("***TESTING*** Output: " + playerID + str);
             out.writeUTF( playerID + str );
         }
         catch ( IOException e )
