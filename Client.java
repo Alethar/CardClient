@@ -9,9 +9,10 @@ public class Client
     private Socket socket  = null; 
     private Scanner  input   = null; 
     private DataOutputStream out     = null; 
+    private int port = 5000;
     // constructor to put ip address and port 
     
-    public Client(String address, int port, Player p) 
+    public Client(String address, Player p) 
     { 
         try
         { 

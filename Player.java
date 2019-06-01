@@ -53,14 +53,13 @@ public class Player
     public Player()
     {
 
-        System.out.println("*** UNO ***");
-        System.out.println("");
-        System.out.println("***********");
+        System.out.println( "*** UNO ***" );
+        System.out.println( "" );
+        System.out.println( "***********" );
         System.out.println( "Enter IP address" );
-        String ip = in.nextLine();
-        System.out.println( "Enter port" );
-        int port = in.nextInt();
-        client = new Client( ip, port, this );
+        String ip = in.nextLine(); //TODO revert
+        //String ip = "10.0.1.7"; Testing purposes
+        client = new Client( ip, this );
         while ( true )
         {
             try
@@ -104,9 +103,8 @@ public class Player
                     draw( serverInput.substring( 2 ) );
                     if ( !( predraw < 28 ) )
                     {
-                        
-                        System.out
-                            .println( "- You draw, with " + hand.size() + " now in hand." );
+
+                        System.out.println( "- You draw, with " + hand.size() + " now in hand." );
                     }
                     else
                     {
@@ -137,13 +135,14 @@ public class Player
                 playercards[playerid]--;
                 if ( playerid == idNum )
                 {
-                    System.out
-                        .println( "- You play " + serverInput.substring( 2 ) +  " with " + playercards[playerid] + " now in hand." );
+                    System.out.println( "- You play " + serverInput.substring( 2 ) + " with "
+                        + playercards[playerid] + " now in hand." );
                 }
                 else
                 {
-                    System.out.println( "Player " + ( playerid + 1 ) + " plays " + serverInput.substring( 2 ) + " with "
-                        + playercards[playerid] + " now in hand." );
+                    System.out.println(
+                        "Player " + ( playerid + 1 ) + " plays " + serverInput.substring( 2 )
+                            + " with " + playercards[playerid] + " now in hand." );
                 }
             }
             else if ( serverInput.substring( 1, 2 ).equals( "t" ) )
@@ -171,8 +170,9 @@ public class Player
             // update
             System.out.println( "Game Start! Starting Card: " + serverInput.substring( 1 ) );
         }
-        else if(serverInput.substring( 0, 1 ).equals( "k" )) {//skip
-            System.out.println("Turn skipped!");
+        else if ( serverInput.substring( 0, 1 ).equals( "k" ) )
+        {// skip
+            System.out.println( "Turn skipped!" );
         }
         else if ( serverInput.substring( 0, 1 ).equals( "c" ) )// change color
         {
@@ -216,7 +216,6 @@ public class Player
         }
 
     }
-
 
 
     public boolean isPlayable( int index )
@@ -329,7 +328,14 @@ public class Player
             {
                 System.out.println( "Enter Color:" );
                 String color = in.nextLine();
-                System.out.println("***TESTING*** Processed: " + color);
+                color = color.toLowerCase();
+                while ( !color.equals( "green" ) && !color.equals( "red" )
+                    && !color.equals( "yellow" ) && !color.equals( "blue" ) )
+                {
+                    System.out.println(
+                        color + " is not a valid color - Enter Green, Red, Yellow, or Blue." );
+                    color = in.nextLine();
+                }
                 hand.remove( handpos );
                 client.sendAction( "p" + handpos + color, idNum );
             }
@@ -392,7 +398,10 @@ public class Player
     {
         this.connected = connected;
     }
-    public Client getClient() {
+
+
+    public Client getClient()
+    {
         return client;
     }
 }
