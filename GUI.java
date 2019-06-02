@@ -22,7 +22,9 @@ import javax.swing.JOptionPane;
 
 public class GUI extends JFrame
 {
-    private JFrame frame;
+    private JPanel titletitlePanel;
+    
+    private JPanel titlecontentPanel;
 
     private JButton button;
 
@@ -33,99 +35,100 @@ public class GUI extends JFrame
     private Player p;
 
     private Client client;
+    
+    private String ip = "";
+
+    private String previp = "";
 
 
     /**
-     * Launch the application.
+     * Create the application.
      */
-    public static void main( String[] args )
+    public GUI( Player p )
     {
-        EventQueue.invokeLater( new Runnable()
-        {
-            public void run()
-            {
-                try
-                {
-                    GUI window = new GUI();
-                    window.pack();
-                    window.setLayout( new BorderLayout() );
-                    window.setSize( new Dimension( 1000, 800 ) );
-                    /*
-                     * window.getContentPane().setBackground( new Color( 200,
-                     * 200, 200 ) );
-                     */
-                }
-                catch ( Exception e )
-                {
-                    e.printStackTrace();
-                }
-            }
-        } );
-    }
+        this.p = p;
+        setLayout( new BorderLayout() );
+        titletitlePanel = new JPanel();
+        titletitlePanel.setLayout( new BoxLayout( titletitlePanel, BoxLayout.Y_AXIS ) );
 
-
-    public GUI() throws IOException
-    {
-        // JFrame frame = new JFrame("Uno");
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout( new BorderLayout() );
-
-        // mainPanel.setPreferredSize( new Dimension( 1000, 45 ) );
-        mainPanel.setPreferredSize( new Dimension( 500, 400 ) );
-
-        // JButton deck = new JButton("Test");
-        // deck.addActionListener( this );
-        // mainPanel.add( deck );
-        /*
-         * JLabel testL = new JLabel( "U N O" ); testL.setFont( new Font(
-         * "Monaco", Font.PLAIN, 30 ) ); testL.setAlignmentX(
-         * Component.CENTER_ALIGNMENT );
-         * 
-         * mainPanel.add( testL ); JSeparator testS = new JSeparator(
-         * SwingConstants.HORIZONTAL ); testS.setForeground( new Color( 50, 50,
-         * 50 ) ); testS.setSize( new Dimension( 5, 5 ) );mainPanel.add( testS
-         * );
-         */
-        //TODO JTEXTFIELD
+        titletitlePanel.setSize( new Dimension( 1000, 100 ) );
         
+        JLabel titleLabel = new JLabel( "U N O" );
+        titleLabel.setFont( new Font( "sansserif", Font.BOLD, 50 ) );
+        titleLabel.setAlignmentX( Component.CENTER_ALIGNMENT );
+        JSeparator titleS = new JSeparator( SwingConstants.HORIZONTAL );
+        titleS.setForeground( new Color( 50, 50, 50 ) );
+        titleS.setSize( new Dimension( 10, 5 ) );
+
+        getContentPane().add( titletitlePanel, BorderLayout.NORTH );
+
+        titletitlePanel.add( titleLabel, BorderLayout.NORTH );
+        /*
+         * JSeparator titleS = new JSeparator( SwingConstants.HORIZONTAL );
+         * titleS.setForeground( new Color( 50, 50, 50 ) ); titleS.setSize( new
+         * Dimension( 5, 5 ) );
+         */
+        // mainPanel.add( titleS );
+        
+
+        titletitlePanel.setBackground( new Color( 200, 200, 200 ) );
+        
+        titlecontentPanel = new JPanel();
+        
+        titlecontentPanel.setLayout( null );
+        
+        JLabel contentWelcome = new JLabel("Welcome to Uno");
+        contentWelcome.setFont( new Font("sansserif", Font.PLAIN, 30) );
+        contentWelcome.setAlignmentX( Component.CENTER_ALIGNMENT );
+        contentWelcome.setBounds( 380, 130, 250, 100 );
+        titlecontentPanel.add( contentWelcome );
+        
+        JLabel contentIPPrompt = new JLabel("Enter IP Address");
+        contentIPPrompt.setFont( new Font("sansserif", Font.PLAIN, 20) );
+        contentIPPrompt.setAlignmentX( Component.CENTER_ALIGNMENT );
+        contentIPPrompt.setBounds( 420, 200, 200, 100 );
+        titlecontentPanel.add( contentIPPrompt );
+        String ip = "";
+        JTextField contentIPInput = new JTextField("IP Address");
+        contentIPInput.setBounds( 400, 270, 200, 20 );
+        contentIPInput.addActionListener( new ActionListener(){
+            @Override
+            public void actionPerformed( ActionEvent buttonpress ) {
+                final String ip = contentIPInput.getText();
+                setIP(ip);
+                System.out.println(ip + " entered");
+            }
+        });
+        titlecontentPanel.add( contentIPInput );
+        
+        JButton content = new JButton("Connect");
+        content.setBounds( 410, 310, 180, 20 );
+        content.addActionListener( new ActionListener(){
+            @Override
+            public void actionPerformed( ActionEvent buttonpress ) {
+                final String ip = contentIPInput.getText();
+                setIP(ip);
+                System.out.println(ip + " entered");
+            }
+        });
+
+        titlecontentPanel.add( content );
+        
+        //contentIPInput.getAccessibleContext()
+        
+        getContentPane().add( titlecontentPanel, BorderLayout.CENTER );
+        getContentPane().setForeground( new Color( 100, 100, 100 ) );
+        getContentPane().setBackground( new Color( 100, 100, 100 ) );
+        setResizable( false );
         setVisible( true );
+        setSize( new Dimension( 1000, 800 ) );
+        
 
-        add( mainPanel, BorderLayout.NORTH );
-
-        BufferedImage bi = ImageIO.read( new File( "blue0.png" ) );
-        JLabel picLabel = new JLabel(
-            new ImageIcon( getScaledImage( new ImageIcon( bi ).getImage(), 100, 100 ) ) );
-        picLabel.addMouseListener( new MouseAdapter()
-        {
-            public void mouseClicked( MouseEvent e )
-            {
-                System.out.println( "CLick" );
-
-            }
-
-
-            public void mouseEntered( MouseEvent e )
-            {
-                System.out.println( "Enter" );
-                mainPanel.remove( picLabel );
-                mainPanel.add( picLabel, BorderLayout.SOUTH );
-                refresh( mainPanel );
-
-            }
-
-
-            public void mouseExited( MouseEvent e )
-            {
-                System.out.println( "Exit" );
-                mainPanel.remove( picLabel );
-                mainPanel.add( picLabel, BorderLayout.NORTH );
-                refresh( mainPanel );
-
-            }
-
-        } );
-        mainPanel.add( picLabel, BorderLayout.NORTH );
-
+    }
+    
+    
+    public void drawGame() {
+        
     }
 
 
@@ -151,23 +154,45 @@ public class GUI extends JFrame
 
         return resizedImg;
     }
-
-
+    
     /**
-     * Create the application.
+     * 
+     * waits until player inputs a IP address, then returns it
+     * @return
      */
-    public GUI( Player p )
-    {
-
-        /*
-         * JFrame frame = new JFrame( "Uno" ); setBackground( new Color( 0, 120,
-         * 0 ) ); setForeground( Color.GREEN ); mainPanel.setPreferredSize( new
-         * Dimension( 100, 100 ) ); JButton deck = new JButton( "Deck Please" );
-         * deck.addActionListener( this ); mainPanel.add( deck );
-         */
+    public String getIPAddress() {
+        
+        while(ip == previp) {
+            try
+            {
+                Thread.sleep( 150 );
+            }
+            catch ( InterruptedException e )
+            {
+                e.printStackTrace();
+            }
+        }
+        previp = ip;
+        return ip;
     }
-
-
+    
+    public void drawIPFail() {
+        System.out.println("Connection failed, try again");
+        JLabel connectionFail = new JLabel("Connection failed, try again");
+        connectionFail.setFont( new Font("sansserif", Font.PLAIN, 60) );
+        connectionFail.setBounds( 410, 350, 180, 40 );
+        Component[] comps = titlecontentPanel.getComponents();
+        for(Component c:comps) {
+            if(c instanceof JTextField) {
+                ((JTextField)c).setText( "Not a Valid IP: Retype" );
+            }
+        }
+        titlecontentPanel.add( connectionFail );
+        refresh(titlecontentPanel);
+        
+    }
+    
+    
     public void refresh( JComponent mainPanel )
     {
         mainPanel.invalidate();
@@ -212,6 +237,103 @@ public class GUI extends JFrame
     void switchColor()
     {
 
+    }
+    
+    /*public GUI() throws IOException
+    {
+        // JFrame frame = new JFrame("Uno");
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout( new BorderLayout() );
+
+        // mainPanel.setPreferredSize( new Dimension( 1000, 45 ) );
+        mainPanel.setPreferredSize( new Dimension( 500, 400 ) );
+
+        // JButton deck = new JButton("Test");
+        // deck.addActionListener( this );
+        // mainPanel.add( deck );
+        /*
+         * JLabel testL = new JLabel( "U N O" ); testL.setFont( new Font(
+         * "Monaco", Font.PLAIN, 30 ) ); testL.setAlignmentX(
+         * Component.CENTER_ALIGNMENT );
+         * 
+         * mainPanel.add( testL ); JSeparator testS = new JSeparator(
+         * SwingConstants.HORIZONTAL ); testS.setForeground( new Color( 50, 50,
+         * 50 ) ); testS.setSize( new Dimension( 5, 5 ) );mainPanel.add( testS
+         * );
+         */
+        // TODO JTEXTFIELD
+
+        /*setVisible( true );
+
+        add( mainPanel, BorderLayout.NORTH );
+
+        BufferedImage bi = ImageIO.read( new File( "blue0.png" ) );
+        JLabel picLabel = new JLabel(
+            new ImageIcon( getScaledImage( new ImageIcon( bi ).getImage(), 100, 100 ) ) );
+        picLabel.addMouseListener( new MouseAdapter()
+        {
+            public void mouseClicked( MouseEvent e )
+            {
+                System.out.println( "CLick" );
+
+            }
+
+
+            public void mouseEntered( MouseEvent e )
+            {
+                System.out.println( "Enter" );
+                mainPanel.remove( picLabel );
+                mainPanel.add( picLabel, BorderLayout.SOUTH );
+                refresh( mainPanel );
+
+            }
+
+
+            public void mouseExited( MouseEvent e )
+            {
+                System.out.println( "Exit" );
+                mainPanel.remove( picLabel );
+                mainPanel.add( picLabel, BorderLayout.NORTH );
+                refresh( mainPanel );
+
+            }
+
+        } );
+        mainPanel.add( picLabel, BorderLayout.NORTH );
+
+    }*/
+
+    /**
+     * Launch the application. For testing purposes only.
+     */
+    public static void main( String[] args )
+    {
+        EventQueue.invokeLater( new Runnable()
+        {
+            public void run()
+            {
+                try
+                {
+                    GUI window = new GUI( null );
+                    /*
+                     * window.getContentPane().setBackground( new Color( 200,
+                     * 200, 200 ) );
+                     */
+                    /*
+                     * window.setSize( new Dimension( 1000, 800 ) );
+                     * window.pack(); window.setVisible( true );
+                     */
+                }
+                catch ( Exception e )
+                {
+                    e.printStackTrace();
+                }
+            }
+        } );
+    }
+    
+    public void setIP(String ip) {
+        this.ip = ip;
     }
 
 }

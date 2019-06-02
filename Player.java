@@ -1,6 +1,7 @@
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import javax.swing.*;
 
 
 /**
@@ -18,6 +19,8 @@ import javax.swing.*;
  */
 public class Player
 {
+    private String ip = "";
+
     private boolean connected;
 
     private Client client;
@@ -52,14 +55,21 @@ public class Player
      */
     public Player()
     {
-
-        System.out.println( "*** UNO ***" );
-        System.out.println( "" );
-        System.out.println( "***********" );
-        System.out.println( "Enter IP address" );
-        String ip = in.nextLine(); //TODO revert
-        //String ip = "10.0.1.7"; Testing purposes
-        client = new Client( ip, this );
+        // String ip = "10.0.1.7"; Testing purposes
+        GUI gui = new GUI( this );
+        while(true) {
+            ip = gui.getIPAddress();
+            try
+            {
+                client = new Client( ip, this );
+                break;
+            }
+            catch ( Exception e )
+            {
+                gui.drawIPFail();
+            }
+        }
+        System.out.println( "passed" );
         while ( true )
         {
             try
@@ -199,6 +209,13 @@ public class Player
     }
 
 
+    public boolean connectServer()
+    {
+
+        return false;
+    }
+
+
     public static boolean isInteger( String s )
     {
         try
@@ -328,13 +345,17 @@ public class Player
             {
                 System.out.println( "Enter Color:" );
                 String color = in.nextLine();
+                color = in.nextLine();
                 color = color.toLowerCase();
+
                 while ( !color.equals( "green" ) && !color.equals( "red" )
                     && !color.equals( "yellow" ) && !color.equals( "blue" ) )
                 {
                     System.out.println(
                         color + " is not a valid color - Enter Green, Red, Yellow, or Blue." );
                     color = in.nextLine();
+                    color = color.toLowerCase();
+
                 }
                 hand.remove( handpos );
                 client.sendAction( "p" + handpos + color, idNum );
