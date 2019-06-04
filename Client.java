@@ -10,14 +10,22 @@ public class Client
     // initialize socket and input output streams
     private Socket socket = null;
 
-    private Scanner input = null;
-
     private DataOutputStream out = null;
 
     private int port = 5000;
     // constructor to put ip address and port
 
 
+    /**
+     * constructor creates new serverlistener after connecting to server
+     * 
+     * @param address
+     *            ip to connect to
+     * @param p
+     *            player
+     * @throws Exception
+     *             things go wrong
+     */
     public Client( String address, Player p ) throws Exception
     {
         int timeout = 100;
@@ -32,11 +40,20 @@ public class Client
     }
 
 
+    /**
+     * 
+     * sends string to server
+     * 
+     * @param str
+     *            to send
+     * @param playerID
+     *            person sending
+     */
     public void sendAction( String str, int playerID )
     {
         try
         {
-            System.out.println( "***TESTING*** Output: " + playerID + str );
+
             out.writeUTF( playerID + str );
         }
         catch ( IOException e )

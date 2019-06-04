@@ -13,6 +13,14 @@ public class ServerListener extends Thread
     private Player player;
 
 
+    /**
+     * initializes
+     * 
+     * @param socket
+     *            socket to use
+     * @param player
+     *            player to send msgs to
+     */
     public ServerListener( Socket socket, Player player )
     {
         try
@@ -29,6 +37,9 @@ public class ServerListener extends Thread
     }
 
 
+    /**
+     * constantly checks for messages and sends them to player
+     */
     public void run()
     {
         while ( !stopRun )
@@ -36,16 +47,32 @@ public class ServerListener extends Thread
             try
             {
                 String serverInput = in.readUTF();
+
                 int serverAuth = Integer.parseInt( serverInput.substring( 0, 1 ) );
                 if ( serverAuth == 4 )
                 {
                     if ( player.isInteger( serverInput.substring( 0, 1 ) )
-                        && serverInput.substring( 1, 2 ).equals( "t" ) )
+                        && serverInput.substring( 1, 2 ).equals( "t" ) )// when
+                                                                        // is
+                                                                        // your
+                                                                        // turn.
+                                                                        // Allows
+                                                                        // player
+                                                                        // to
+                                                                        // take
+                                                                        // a
+                                                                        // turn
+                                                                        // while
+                                                                        // server
+                                                                        // is
+                                                                        // updating
+                                                                        // info
                     {
                         player.checkInput = true;
                         player.input = serverInput;
                     }
-                    else {
+                    else
+                    {
                         player.takeInput( serverInput.substring( 1 ) );
                     }
                 }
@@ -63,6 +90,9 @@ public class ServerListener extends Thread
     }
 
 
+    /**
+     * ends thread
+     */
     public void end()
     {
         stopRun = true;
